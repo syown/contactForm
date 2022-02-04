@@ -1,0 +1,39 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - Laravel:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  pma:
+    image: phpmyadmin
+    container_name: pma
+    ports:
+      - 8080:80
+    volumes:
+      - ./dockerbuild/phpmyadmin-misc.ini:/usr/local/etc/php/conf.d/phpmyadmin-misc.ini
+    environment:
+      PMA_HOST: 'mysql'
+      PMA_USER: 'root'
+      PMA_PASSWORD: 'root'
+
+  php:
+    build: ./
+    container_name: phpapache
+    volumes:
+      - ./home/:/var/www/html
+    ports:
+      - 80:80
+      - 443:443
+
+volumes:
+  Laravel:
+    name: devLaravel
+
+
+
